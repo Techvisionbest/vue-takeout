@@ -12,7 +12,7 @@
         <div class="description">
           {{seller.description}}/{{seller.deliveryTime}}分钟送达
         </div>
-        <div v-if="seller.supports"class="support">
+        <div v-if="seller.supports" class="support">
           <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
@@ -28,17 +28,39 @@
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
-      <img :src="seller.avatar" width="100%"height="100%">
+      <img :src="seller.avatar" width="100%" height="100%">
     </div>
     <transition name="fade">
       <div v-show="detailShow" class="detail">
-        <div class="detail-wrapper">
+        <div class="detail-wrapper clearfix">
           <div class="detail-main">
             <h1 class="name">{{seller.name}}</h1>
             <div class="star-wrapper">
               <star :size="48" :score="seller.score"></star>
             </div>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <ul v-if="seller.supports" class="supports">
+              <li class="support-item" v-for="(item,index) in seller.supports">
+                <span class="icon" :class="classMap[seller.supports[index].type]"></span>
+                <span class="text">{{seller.supports[index].description}}</span>
+              </li>
+            </ul>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="bulletin">
+              <p class="content">{{seller.bulletin}}</p>
+            </div>
           </div>
+        </div>
+        <div class="detail-close" @click="hideDetail">
+          <i class="icon-close"></i>
         </div>
       </div>
     </transition>
@@ -48,11 +70,11 @@
 <script>
   import star from 'components/star/star.vue'
     export default {
-        props:{
-          seller:{
-            type:Object
-          }
-        },
+      props: {
+        seller: {
+          type: Object
+        }
+      },
       data(){
           return{
             detailShow:true
@@ -61,6 +83,7 @@
       methods:{
           showDetail(){
             this.detailShow=true;
+            console.log("show detail")
           },
         hideDetail(){
             this.detailShow=false;
@@ -75,15 +98,15 @@
     }
 </script>
 
-<style lang="stylus"rel="stylesheet/stylus">
+<style lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/mixin.styl'
   .header
     position relative
     overflow hidden
     color: #fff
     background rgba(7,17,27,0.5)
-    font-size 0
     .content-wrapper
+      font-size 0
       position: relative
       padding: 24px 12px 18px 24px
       .avatar
@@ -186,4 +209,82 @@
       height: 100%
       z-index: -1
       filter:blur(8px)
+    .detail
+      position: fixed
+      z-index: 100
+      top 0
+      left 0
+      width: 100%
+      height: 100%
+      background: rgba(7, 17, 27, 0.7)
+      backdrop-filter: blur(10px)
+      overflow auto
+      .detail-wrapper
+        width: 100%
+        min-height: 100%
+        .detail-main
+          margin-top 64px
+          padding-bottom 64px
+          .name
+            font-size: 16px
+            text-align center
+            font-weight 700
+            line-height 16px
+          .star-wrapper
+            text-align center
+            margin-top 18px
+            padding: 2px 0
+
+          .title
+            display: flex
+            width 80%
+            margin: 28px auto 24px auto
+            .line
+              flex 1
+              position: relative
+              top: -6px
+              border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+            .text
+              padding: 0 12px
+              font-weight 700
+              font-size: 14px
+          .supports
+            width: 80%
+            margin: 0 auto
+            .support-item
+              font-size 14px
+              padding-bottom 14px
+              .icon
+                background-size 16px
+                background-repeat no-repeat
+                width: 16px
+                height: 16px
+                display: inline-block
+                line-height 16px
+                margin-left 10px
+                vertical-align top
+                &.decrease
+                  bg-image('decrease_1')
+                &.discount
+                  bg-image('discount_1')
+                &.guarantee
+                  bg-image('guarantee_1')
+                &.invoice
+                  bg-image('invoice_1')
+                &.special
+                  bg-image('special_1')
+          .bulletin
+            width: 80%
+            margin: 0 auto
+            font-size: 12px
+            padding: 0 18px
+            .content
+              letter-spacing 1px
+              line-height 18px
+
+      .detail-close
+        height: 32px
+        width: 32px
+        font-size 32px
+        margin: -20px auto 0px auto
 </style>
