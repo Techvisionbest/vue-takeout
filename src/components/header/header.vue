@@ -77,7 +77,7 @@
       },
       data(){
           return{
-            detailShow:true
+            detailShow: false
           };
       },
       methods:{
@@ -219,6 +219,11 @@
       background: rgba(7, 17, 27, 0.7)
       backdrop-filter: blur(10px)
       overflow auto
+      &.fade-enter, &.fade-leave-active
+        opacity: 0
+        background: rgba(7, 17, 27, 0)
+      &.fade-enter-active, &.fade-leave-active
+        transition all 0.5s
       .detail-wrapper
         width: 100%
         min-height: 100%
